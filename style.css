@@ -84,13 +84,6 @@ h1{
     flex-direction: column;
 }
 
-.escrever img{
-    margin-top: auto;
-    margin-left: auto;
-    height: 25%;
-    width: 8%;
-}
-
 textarea{
     font-size: 0.96vw;
     width: 100%;
@@ -101,6 +94,10 @@ textarea{
     padding: 1vh 1vw;
 }
 
+textarea:focus{
+    outline: none;
+}
+
 button{
     width: 40%;
     height: 6%;
@@ -108,7 +105,6 @@ button{
     cursor: pointer;
 
 }
-
 .imprimir{
     padding: 1vh 1vw;
     background-color: #F8F8F8;
@@ -116,12 +112,6 @@ button{
     height: 32%;
     display: flex;
     flex-direction: column;   
-}
-
-.imprimir img{
-    margin-left: auto;
-    height: 25%;
-    width: 8%;
 }
 
 p{
@@ -146,6 +136,11 @@ p{
     background-color: #070F2B;
 }
 
+option{
+    background-color: #535C91;
+    color: white;
+}
+
 .campos_escuros{
     background-color: #9290C3;
 }
@@ -158,4 +153,22 @@ select{
 select, option{
     cursor: pointer;
 
+}
+
+.linha{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 3vw;
+}
+
+.linha img{
+    height: 70%;
+    width: 7%;
+}
+
+#audioSaida{
+    cursor: pointer;
 }

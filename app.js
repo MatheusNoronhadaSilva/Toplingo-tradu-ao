@@ -12,6 +12,8 @@ const escrever = document.getElementById('escrever')
 const imprimir = document.getElementById('imprimir')
 const p = document.querySelector('p')
 const textArea = document.querySelector('textarea')
+const audioSaida = document.getElementById('audioSaida')
+const audioEntrada = document.getElementById('audioEntrada')
 let escuro = false
 
 const brasil = './img/brasil 1.png'
@@ -27,7 +29,12 @@ let img2 = eua
 img_escrever.src = img1
 img_imprimir.src = img2
 
-botao.onclick = traduzir
+botao.onclick = verificartexto
+audioSaida.onclick = falar
+trocar.onclick = inverterIdioma
+audioEntrada.onclick = ativarReconhecimento
+
+
 
 select1.addEventListener('change', function(){
     trocarImagens()
@@ -75,7 +82,11 @@ function mudarCores(){
         escrever.classList.add('campos_escuros')
         imprimir.classList.add('campos_escuros')
         p.classList.add('branco', 'campos_escuros')
-        textArea.classList.add('campos_escuros')
+        textArea.classList.add('branco', 'campos_escuros')
+        select1.classList.add('branco')
+        select2.classList.add('branco')
+        tema.src = './img/sol 1 (1).png'
+        trocar.src = './img/troca (3) 1.png'
     } else {
         escuro = false
         container.classList.remove('container_escuro')
@@ -83,7 +94,12 @@ function mudarCores(){
         escrever.classList.remove('campos_escuros')
         imprimir.classList.remove('campos_escuros')
         p.classList.remove('branco', 'campos_escuros')
-        textArea.classList.remove('campos_escuros')
+        textArea.classList.remove('branco', 'campos_escuros')
+        select1.classList.remove('branco', 'campos_escuros')
+        select2.classList.remove('branco')
+        tema.src = './img/lua 1.png'
+        trocar.src = './img/image-removebg-preview (2).png'
+
     }
 
 }
@@ -165,11 +181,64 @@ function trocarImagens(){
 
 }
 
+function inverterIdioma(){
+
+    const select1 = document.getElementById('select1')
+    const select2 = document.getElementById('select2')
+
+    const select1Index = select1.selectedIndex
+    let linguaTraduzir = select1.options[select1Index].value
+    console.log(linguaTraduzir);
+
+    const select2Index = select2.selectedIndex
+    let linguaTraduzida = select2.options[select2Index].value
+    console.log(linguaTraduzida);    
+    
+    select1.selectedIndex = select2Index
+    select2.selectedIndex = select1Index
+
+    trocarImagens()
+
+}
+
 function trocarTextoBotao() {
 
     const linguas = verificarSelect()
 
     botao.textContent = `Traduzir para ${linguas[1]}`
+}
+
+function falar() {
+
+    const textoTraduzido = p.textContent
+
+    console.log('falou');
+
+    if(textoTraduzido == '') {
+        alert('não há nada para traduzir')
+    }
+    
+    
+    if ('speechSynthesis' in window) {
+        var synth = window.speechSynthesis;
+        var utterance = new SpeechSynthesisUtterance(textoTraduzido);
+        // Define a voz a ser usada (opcional)
+        // utterance.voice = synth.getVoices()[0]; // Você pode ajustar o índice para escolher uma voz específica
+        // Inicia a síntese de fala
+        synth.speak(utterance);
+    } else {
+        alert('Desculpe, seu navegador não suporta a síntese de fala.');
+    }
+}
+
+function verificartexto(){
+    const texto = document.getElementById('texto').value
+
+    if(texto == "alice" || texto == 'Alice' || texto == 'ALICE'){
+        mudarCores()
+    } else {        
+        traduzir()
+    }
 }
 
 async function traduzir() {
@@ -185,9 +254,23 @@ async function traduzir() {
         console.log(url);
         
     const data = await response.json();
-    console.log(response);
     
     const traducao = data.responseData.translatedText;
     document.getElementById('impressao').innerText = traducao;
     }
+}
+
+function ativarReconhecimento() {
+
+    const texto = document.getElementById('texto')
+    texto.innerHTML = ''
+
+    const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+    recognition.lang = 'pt-BR'; // Define o idioma para o reconhecimento (opcional)
+    recognition.onresult = function(event) {
+        const resultado = event.results[event.results.length - 1][0].transcript;
+        console.log('fala: ' + resultado);
+        texto.textContent = resultado
+    };
+    recognition.start();
 }
