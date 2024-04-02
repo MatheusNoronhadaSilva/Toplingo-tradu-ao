@@ -16,12 +16,14 @@ const audioSaida = document.getElementById('audioSaida')
 const audioEntrada = document.getElementById('audioEntrada')
 let escuro = false
 
-const brasil = './img/brasil 1.png'
-const eua = './img/bandeira 1.png'
-const it = './img/franca (1) 1.png'
-const es = './img/espanha (1) 1.png'
-const jp = './img/japao (1) 1.png'
-const fr = './img/franca (1) 1.png'
+const brasil = './img/brazil (1) 1.png'
+const eua = './img/eua.png'
+const it = './img/frança e itália.png'
+const es = './img/espanha.png'
+const jp = './img/japan 1.png'
+const fr = './img/frança e itália.png'
+const micAtivado = './img/ouvindo.png'
+const micDesativado = './img/formato-preto-do-microfone 1.png'
 
 let img1 = brasil
 let img2 = eua
@@ -262,15 +264,48 @@ async function traduzir() {
 
 function ativarReconhecimento() {
 
+    audioEntrada.src = micAtivado
+
     const texto = document.getElementById('texto')
-    texto.innerHTML = ''
+
+    console.log('ouvindo');
 
     const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
-    recognition.lang = 'pt-BR'; // Define o idioma para o reconhecimento (opcional)
+    recognition.lang = 'pt-BR';
+    recognition.continuous = true;
+
     recognition.onresult = function(event) {
         const resultado = event.results[event.results.length - 1][0].transcript;
         console.log('fala: ' + resultado);
         texto.textContent = resultado
+        if(resultado == "Alice") {
+            mudarCores()
+        }
     };
+
+    setTimeout(function() {
+        recognition.stop();
+        console.log('Reconhecimento de voz encerrado.');
+        audioEntrada.src = micDesativado
+    }, 10000); // 10s
+
     recognition.start();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+    recognition.lang = 'pt-BR';
+    recognition.continuous = true;
+
+    recognition.onresult = function(event) {
+        const resultado = event.results[event.results.length - 1][0].transcript;
+        console.log('fala: ' + resultado);
+        if(resultado == 'nathalia' || resultado == 'natalia' || resultado == 'Natália') {
+            ativarReconhecimento();
+        } else if (resultado.toLowerCase() == 'para'){
+            recognition.stop()
+        }
+    };
+
+    recognition.start();
+});
