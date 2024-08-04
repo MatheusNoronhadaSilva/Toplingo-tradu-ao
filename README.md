@@ -4,6 +4,7 @@
   <br/>
   27/01/2024-15/02/2024</p>
 <p>Trabalho em duplas para gerenciamento de projetos</p>
+Aplicação de tradução de vários idiomas utilizando IA
 
 <p>Dupla: <a href="https://github.com/LeticiaMeloSilv/TopLingo">Leticia</a>
  </p>
